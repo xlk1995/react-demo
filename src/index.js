@@ -9,43 +9,25 @@ import "./index.css";
 //   </React.StrictMode>
 // );
 
-const Count = (props) => {
-  const { type, count } = props;
-  console.log("我count也执行了哦=======");
-  return (
-    <h1>
-      {type} --- {count}
-    </h1>
-  );
-};
-
 class Test extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: 0,
+      close: true,
     };
-    setInterval(() => {
-      this.setState({
-        count: this.state.count + 1,
-      });
-    }, 1000);
+    // this.handleClick = this.handleClick.bind(this);
   }
-  handleClick(params, e, ee) {
-    console.log(params, e, ee);
+  // public class fields
+  handleClick() {
+    console.log(this);
+    this.setState({
+      close: false,
+    });
   }
   render() {
-    console.log("我reader重新执行了", "=====");
-    const { count } = this.state;
-    const { type } = this.props;
-    return (
-      <div>
-        <div onClick={this.handleClick.bind(this, "fff", "gggg")}>{count}</div>
-        <div>{type}</div>
-        <Count type="你知道我在干什么吗" count={count} />
-      </div>
-    );
+    const { close } = this.state;
+    return <div onClick={this.handleClick}>门 {close ? "关" : "开"}了</div>;
   }
 }
 
-ReactDOM.render(<Test type="xxxx" />, document.getElementById("root"));
+ReactDOM.render(<Test />, document.getElementById("root"));

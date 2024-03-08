@@ -45,7 +45,7 @@ const Count = (props) => {
 };
 ```
 
-## 3. 点击事件怎么获取参数
+## 3. 点击事件
 
 1. 无法传递事件对象
 
@@ -59,10 +59,43 @@ const Count = (props) => {
 <div onClick={(e) => this.handleClick("yyy", e)}>{count}</div>
 ```
 
+每次 render 都会返回一个新的函数
+
 3. 性能更好
 
 ```
 <div onClick={(e) => this.handleClick("yyy", e)}>{count}</div>
+```
+
+### this 丢失问题
+
+如果想直接在函数里面操作 this，会出现 this 丢失的问题，此时 this 是 undefined
+
+```
+class Test extends React.component {
+    handleClick(){
+        this.setState({
+            count:1
+        })
+    }
+}
+```
+
+解决方法有三
+
+```
+<div onClick={()=> this.handleClick()}>门 {close ? "关" : "开"}了</div>;
+```
+
+```
+this.handleClick = this.handleClick.bind(this)
+
+<div onClick={this.handleClick}>门 {close ? "关" : "开"}了</div>;
+```
+
+```
+// public class fields
+handleClick = () => {}
 ```
 
 ## 4. state 和 props
