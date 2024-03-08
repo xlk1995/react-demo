@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
 
 // const root = ReactDOM.createRoot(document.getElementById("root"));
 // root.render(
@@ -9,6 +8,16 @@ import App from "./App";
 //     <App />
 //   </React.StrictMode>
 // );
+
+const Count = (props) => {
+  const { type, count } = props;
+  console.log("我count也执行了哦=======");
+  return (
+    <h1>
+      {type} --- {count}
+    </h1>
+  );
+};
 
 class Test extends React.Component {
   constructor(props) {
@@ -22,17 +31,18 @@ class Test extends React.Component {
       });
     }, 1000);
   }
-  handleClick(params, e) {
-    console.log(params, e);
+  handleClick(params, e, ee) {
+    console.log(params, e, ee);
   }
   render() {
+    console.log("我reader重新执行了", "=====");
     const { count } = this.state;
     const { type } = this.props;
-
     return (
       <div>
-        <div onClick={this.handleClick.bind(this, "fff")}>{count}</div>
+        <div onClick={this.handleClick.bind(this, "fff", "gggg")}>{count}</div>
         <div>{type}</div>
+        <Count type="你知道我在干什么吗" count={count} />
       </div>
     );
   }

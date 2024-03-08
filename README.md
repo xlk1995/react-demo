@@ -36,6 +36,15 @@ class Test extends React.Component {
  const { type } = this.props;
 ```
 
+函数组件的第一个值就是 props
+
+```
+const Count = (props) => {
+  const { type } = props;
+  return <h1>{type}</h1>;
+};
+```
+
 ## 3. 点击事件怎么获取参数
 
 1. 无法传递事件对象
@@ -55,3 +64,9 @@ class Test extends React.Component {
 ```
 <div onClick={(e) => this.handleClick("yyy", e)}>{count}</div>
 ```
+
+## 4. state 和 props
+
+1. state 更新会执行 render 函数
+2. props 改变需要借助父组件的 state 更新
+3. 定制化使用 props, 静态使用 state
