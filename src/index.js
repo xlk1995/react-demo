@@ -1,33 +1,57 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import "./index.css";
-
-// const root = ReactDOM.createRoot(document.getElementById("root"));
-// root.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
 
 class Test extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      close: true,
+      amount: 1,
+      fruits: "",
     };
-    // this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
-  // public class fields
-  handleClick() {
-    console.log(this);
+  handleChange(e) {
+    console.log(e.target.type, e.target.name);
+    const { value, name } = e.target;
+
     this.setState({
-      close: false,
+      [name]: value,
     });
   }
+  handleSubmit(e) {
+    console.log("submit", e);
+    console.log("你喜欢的口味是" + this.state.val);
+    e.preventDefault();
+  }
   render() {
-    const { close } = this.state;
-    return <div onClick={this.handleClick}>门 {close ? "关" : "开"}了</div>;
+    const { val, inputVal } = this.state;
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="number"
+            value={inputVal}
+            onChange={this.handleChange}
+            name="amount"
+          />
+          <select value={val} onChange={this.handleChange} name="fruits">
+            <option value="apple">苹果</option>
+            <option value="orange">橘子</option>
+            <option value="peer">梨子</option>
+          </select>
+
+          <input type="submit" value="提交" />
+        </form>
+      </div>
+    );
   }
 }
 
-ReactDOM.render(<Test />, document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <Test />
+  </React.StrictMode>
+);

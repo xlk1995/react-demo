@@ -103,3 +103,141 @@ handleClick = () => {}
 1. state 更新会执行 render 函数
 2. props 改变需要借助父组件的 state 更新
 3. 定制化使用 props, 静态使用 state
+
+## 生命周期
+
+只有类组件才有生命周期， 一次状态的改变，会有 render 和 commit 阶段
+
+render 阶段在 render 函数执行， 并在此阶段进行 dom 的 diff，找出需要改变的 dom， 然后在 commit 阶段将对应的 dom 提交到视图中
+
+待更
+
+## jsx 的各种用法
+
+待更
+
+## 受控组件
+
+所有的状态都被 state 控制。把 value 设置为 null
+
+### input/textarea
+
+```
+class Test extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputVal: "",
+    };
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(e) {
+    console.log(e.target.value);
+    this.setState({
+      inputVal: e.target.value,
+    });
+  }
+  render() {
+    const { inputVal } = this.state;
+    return (
+      <div>
+        <input value={inputVal} onChange={this.handleChange} />
+      </div>
+    );
+  }
+}
+```
+
+### select
+
+```
+
+class Test extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputVal: "",
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleChange(e) {
+    console.log(e.target.value);
+    this.setState({
+      val: e.target.value,
+    });
+  }
+  handleSubmit(e) {
+    console.log("submit", e);
+    console.log("你喜欢的口味是" + this.state.val);
+    e.preventDefault();
+  }
+  render() {
+    const { val } = this.state;
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <select value={val} onChange={this.handleChange}>
+            <option value="apple">苹果</option>
+            <option value="orange">橘子</option>
+            <option value="peer">梨子</option>
+          </select>
+
+          <input type="submit" value="提交" />
+        </form>
+      </div>
+    );
+  }
+}
+```
+
+### 绑定多个值，需要 name
+
+```
+class Test extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      amount: 1,
+      fruits: "",
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleChange(e) {
+    console.log(e.target.type, e.target.name);
+    const { value, name } = e.target;
+
+    this.setState({
+      [name]: value,
+    });
+  }
+  handleSubmit(e) {
+    console.log("submit", e);
+    console.log("你喜欢的口味是" + this.state.val);
+    e.preventDefault();
+  }
+  render() {
+    const { val, inputVal } = this.state;
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="number"
+            value={inputVal}
+            onChange={this.handleChange}
+            name="amount"
+          />
+          <select value={val} onChange={this.handleChange} name="fruits">
+            <option value="apple">苹果</option>
+            <option value="orange">橘子</option>
+            <option value="peer">梨子</option>
+          </select>
+
+          <input type="submit" value="提交" />
+        </form>
+      </div>
+    );
+  }
+}
+```
