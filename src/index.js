@@ -30,13 +30,8 @@ class Test extends React.Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <input
-            type="number"
-            value={inputVal}
-            onChange={this.handleChange}
-            name="amount"
-          />
-          <select value={val} onChange={this.handleChange} name="fruits">
+          <input type="text" name="amount" />
+          <select value={null} name="fruits">
             <option value="apple">苹果</option>
             <option value="orange">橘子</option>
             <option value="peer">梨子</option>
