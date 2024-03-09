@@ -2,43 +2,168 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-class Test extends React.Component {
+const list = [
+  {
+    categoryName: "phone",
+    name: "iphone11",
+    stock: 10,
+    price: 5000,
+  },
+  {
+    categoryName: "phone",
+    name: "iphone12",
+    stock: 10,
+    price: 6000,
+  },
+  {
+    categoryName: "phone",
+    name: "iphone13",
+    stock: 0,
+    price: 9000,
+  },
+  {
+    categoryName: "computer",
+    name: "m1",
+    stock: 10,
+    price: 7000,
+  },
+  {
+    categoryName: "computer",
+    name: "m2",
+    stock: 0,
+    price: 9000,
+  },
+  {
+    categoryName: "computer",
+    name: "m3",
+    stock: 10,
+    price: 10000,
+  },
+];
+
+class Search extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      amount: 1,
-      fruits: "",
-    };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleChange(e) {
-    console.log(e.target.type, e.target.name);
-    const { value, name } = e.target;
+    const target = e.target;
+    const { type, value, name } = target;
+    const v = type === "text" ? value : target.checked;
+    this.props.handleChangeSearch(name, v);
+  }
+  render() {
+    const { keywords, hasStock } = this.props;
+    return (
+      <div>
+        <input
+          type="text"
+          onChange={this.handleChange}
+          value={keywords}
+          name="keywords"
+        />
+        <hr />
+        <input
+          type="checkbox"
+          onChange={this.handleChange}
+          checked={hasStock}
+          name="hasStock"
+        />
+        只展示有库存的商品
+        <hr />
+      </div>
+    );
+  }
+}
+function CategoryTitle(props) {
+  return (
+    <tr>
+      <th>{props.title}</th>
+    </tr>
+  );
+}
 
+function ProductItem(props) {
+  const { product } = props;
+  return (
+    <tr>
+      <td>{product.name}</td>
+      <td>{product.price}</td>
+      <td style={{ color: product.stock === 0 ? "red" : "black" }}>
+        {product.stock}
+      </td>
+    </tr>
+  );
+}
+
+class TableWrapper extends React.Component {
+  render() {
+    const { list } = this.props;
+    const row = [];
+    let lastCategory = null;
+    const { keywords, hasStock } = this.props;
+    list.forEach((product) => {
+      if (product.name.indexOf(keywords) === -1) {
+        return;
+      }
+      if (hasStock && product.stock === 0) {
+        return;
+      }
+      if (lastCategory !== product.categoryName) {
+        row.push(
+          <CategoryTitle
+            key={product.categoryName}
+            title={product.categoryName}
+          />
+        );
+      }
+      row.push(<ProductItem key={product.name} product={product} />);
+      lastCategory = product.categoryName;
+    });
+
+    return (
+      <table cellSpacing={0}>
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>price</th>
+          </tr>
+        </thead>
+        <tbody>{row}</tbody>
+      </table>
+    );
+  }
+}
+
+class SearchWrapper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChangeSearch = this.handleChangeSearch.bind(this);
+    this.state = {
+      keywords: "",
+      hasStock: false,
+    };
+  }
+  handleChangeSearch(name, value) {
+    console.log(name, value, "0000000");
     this.setState({
       [name]: value,
     });
   }
-  handleSubmit(e) {
-    console.log("submit", e);
-    console.log("你喜欢的口味是" + this.state.val);
-    e.preventDefault();
-  }
   render() {
-    const { val, inputVal } = this.state;
+    const { keywords, hasStock } = this.state;
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
-          <input type="text" name="amount" />
-          <select value={null} name="fruits">
-            <option value="apple">苹果</option>
-            <option value="orange">橘子</option>
-            <option value="peer">梨子</option>
-          </select>
-
-          <input type="submit" value="提交" />
-        </form>
+        <Search
+          handleChangeSearch={this.handleChangeSearch}
+          keywords={keywords}
+          hasStock={hasStock}
+        />
+        <TableWrapper
+          list={this.props.list}
+          keywords={keywords}
+          hasStock={hasStock}
+        />
       </div>
     );
   }
@@ -47,6 +172,6 @@ class Test extends React.Component {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Test />
+    <SearchWrapper list={list} />
   </React.StrictMode>
 );
