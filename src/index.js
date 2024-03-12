@@ -4,14 +4,13 @@ import "./index.css";
 
 const ThemeContext = React.createContext("dark");
 
-class Son extends React.Component {
-  // static contextType = ThemeContext;
-  render() {
-    console.log("son render");
-    return <button className={this.context}>我是一个按钮</button>;
-  }
+function Son() {
+  return (
+    <ThemeContext.Consumer>
+      {(value) => <button>{value}</button>}
+    </ThemeContext.Consumer>
+  );
 }
-Son.contextType = ThemeContext;
 
 class Dad extends React.Component {
   shouldComponentUpdate() {

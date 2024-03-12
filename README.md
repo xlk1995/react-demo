@@ -295,3 +295,32 @@ Son.contextType = ThemeContext; // 只要有contextType 就是消费者
 context 可以无视中间组件的组织渲染， 依然可以响应生产者数据的变化
 
 一个案例来判断，我们在 app, dad, son 的 render 函数中分别输出执行了，在 dad 组件中使用 showComponentUpdate。发现并不能阻断 render， 说明是消费了导致的更新
+
+context 会根据引用标识来决定何时进行渲染， 本质上是 value 的浅比较，每次父组件重新渲染， 可能会触发消费者的意外渲染，
+
+比如
+
+```vue
+value={{message: 'something'}}
+```
+
+需要把他提升到父节点的 state 中
+
+```vue
+this.state = { value: {message: 'something'} }
+```
+
+### 函数式组件使用消费者
+
+接受一个回调函数, 从里面拿到 Context 中的值
+
+```
+function Son() {
+  return (
+    <ThemeContext.Consumer>
+      {(value) => <button>{value}</button>}
+    </ThemeContext.Consumer>
+  );
+}
+
+```
