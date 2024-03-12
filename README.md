@@ -283,3 +283,15 @@ class App extends React.Component {
   }
 }
 ```
+
+```
+Son.contextType = ThemeContext; // 只要有contextType 就是消费者
+```
+
+响应变化的能力到底是由谁提供的， 是 setState 还是生产消费者模型
+
+组件只要定义了 contextType 就是消费者，消费者可以订阅生产者
+
+context 可以无视中间组件的组织渲染， 依然可以响应生产者数据的变化
+
+一个案例来判断，我们在 app, dad, son 的 render 函数中分别输出执行了，在 dad 组件中使用 showComponentUpdate。发现并不能阻断 render， 说明是消费了导致的更新

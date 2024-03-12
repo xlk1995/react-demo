@@ -5,25 +5,48 @@ import "./index.css";
 const ThemeContext = React.createContext("dark");
 
 class Son extends React.Component {
-  static contextType = ThemeContext;
+  // static contextType = ThemeContext;
   render() {
+    console.log("son render");
     return <button className={this.context}>我是一个按钮</button>;
   }
 }
+Son.contextType = ThemeContext;
 
-function Dad() {
-  return (
-    <div>
-      <Son />
-    </div>
-  );
+class Dad extends React.Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+  render() {
+    console.log("dad render");
+    return (
+      <div>
+        <Son />
+      </div>
+    );
+  }
 }
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
+  handleClick = () => {
+    this.setState({
+      count: this.state.count + 1,
+    });
+  };
   render() {
+    console.log("app render");
     return (
       <div>
-        <ThemeContext.Provider value="light">
+        <button onClick={this.handleClick}>点我好吗</button>
+
+        <div>{this.state.count}</div>
+        <ThemeContext.Provider value={this.state.count}>
           <Dad />
         </ThemeContext.Provider>
       </div>
