@@ -64,7 +64,7 @@ const Count = (props) => {
 3. 性能更好
 
 ```
-<div onClick={(e) => this.handleClick("yyy", e)}>{count}</div>
+<div onClick={(e) => this.handleClick.bind("yyy")}>{count}</div>
 ```
 
 ### this 丢失问题
@@ -236,6 +236,48 @@ class Test extends React.Component {
 
           <input type="submit" value="提交" />
         </form>
+      </div>
+    );
+  }
+}
+```
+
+## context
+
+相当于 vue 的 provide/inject
+
+使用步骤
+
+1. React.createContext
+2. context.provider 包裹起来
+3. static contextType = context
+4. this.context 来取值
+
+```
+const ThemeContext = React.createContext("dark");
+
+class Son extends React.Component {
+  static contextType = ThemeContext;
+  render() {
+    return <button className={this.context}>我是一个按钮</button>;
+  }
+}
+
+function Dad() {
+  return (
+    <div>
+      <Son />
+    </div>
+  );
+}
+
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <ThemeContext.Provider value="light">
+          <Dad />
+        </ThemeContext.Provider>
       </div>
     );
   }
