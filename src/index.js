@@ -2,34 +2,29 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-class Home extends React.Component {
-  render() {
-    return <input ref={this.props.inputRef} type="text" />;
-  }
-}
+const Test = React.forwardRef((props, ref) => {
+  return (
+    <div>
+      <button ref={ref}>点我啊</button>
+      {props.children}
+    </div>
+  );
+});
 
-class Form extends React.Component {
-  input_Ref = (el) => {
-    this.inputRef1 = el;
-  };
-  handleClick = () => {
-    this.inputRef1.focus();
-  };
-
-  render() {
-    return (
-      <div>
-        <Home inputRef={this.input_Ref} />
-        <button onClick={this.handleClick}>点我</button>
-      </div>
-    );
-  }
-}
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.ref = React.createRef();
+  }
+  componentDidMount() {
+    console.log(this.ref, "=========");
+  }
   render() {
     return (
       <div>
-        <Form />
+        <Test ref={this.ref}>
+          <h1>hhhhhh</h1>
+        </Test>
       </div>
     );
   }

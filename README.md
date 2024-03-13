@@ -477,3 +477,37 @@ class Form extends React.Component {
   }
 }
 ```
+
+### forwardRef
+
+其实就是一个组件，其他组件可以拿到这个组件的东西
+
+```
+const Test = React.forwardRef((props, ref) => {
+  return (
+    <div>
+      <button ref={ref}>点我啊</button>
+      {props.children}
+    </div>
+  );
+});
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.ref = React.createRef();
+  }
+  componentDidMount() {
+    console.log(this.ref, "=========");
+  }
+  render() {
+    return (
+      <div>
+        <Test ref={this.ref}>
+          <h1>hhhhhh</h1>
+        </Test>
+      </div>
+    );
+  }
+}
+```
