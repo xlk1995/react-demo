@@ -3,36 +3,24 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 
 class Home extends React.Component {
-  clickMe = () => {
-    console.log("我是Home，谁点了我");
-  };
   render() {
-    return <h1 onClick={this.clickMe}>Home</h1>;
+    return <input ref={this.props.inputRef} type="text" />;
   }
 }
 
 class Form extends React.Component {
-  constructor(props) {
-    super(props);
-    this.inputRef = React.createRef();
-    this.buttonRef = React.createRef();
-    this.homeRef = React.createRef();
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.inputRef.current.focus();
-    this.homeRef.current.clickMe();
-  }
+  input_Ref = (el) => {
+    this.inputRef1 = el;
+  };
+  handleClick = () => {
+    this.inputRef1.focus();
+  };
 
   render() {
     return (
       <div>
-        <input type="text" ref={this.inputRef} />
-        <hr />
+        <Home inputRef={this.input_Ref} />
         <button onClick={this.handleClick}>点我</button>
-        <hr />
-        <Home ref={this.homeRef} />
       </div>
     );
   }

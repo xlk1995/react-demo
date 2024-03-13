@@ -449,3 +449,31 @@ class Form extends React.Component {
   }
 }
 ```
+
+### 父节点通过 props 怎么拿到子组件中的 ref
+
+```
+class Home extends React.Component {
+  render() {
+    return <input ref={this.props.inputRef} type="text" />;
+  }
+}
+
+class Form extends React.Component {
+  input_Ref = (el) => {
+    this.inputRef1 = el;
+  };
+  handleClick = () => {
+    this.inputRef1.focus();
+  };
+
+  render() {
+    return (
+      <div>
+        <Home inputRef={this.input_Ref} />
+        <button onClick={this.handleClick}>点我</button>
+      </div>
+    );
+  }
+}
+```
