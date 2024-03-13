@@ -25,11 +25,18 @@ class ErrorBoundary extends React.Component {
 }
 
 class App extends React.Component {
+  constructor() {
+    super();
+    this.divRef = React.createRef();
+    console.log(this.divRef);
+    const div = document.querySelector("div");
+    console.log(div, "--", { div });
+  }
+  componentDidMount() {
+    console.log(this.divRef);
+  }
   render() {
-    // eslint-disable-next-line
-    throw "模拟";
-    // eslint-disable-next-line
-    return <div>111</div>;
+    return <div ref={this.divRef}>你好啊</div>;
   }
 }
 

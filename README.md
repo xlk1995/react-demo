@@ -373,3 +373,41 @@ class App extends React.Component {
   }
 }
 ```
+
+## refs
+
+允许我们访问 Dom 节点或者在 render 方法中创建 react 元素
+
+何时使用 refs
+
+1. 管理焦点。文本选择或者媒体播放
+2. 强制触发动画
+3. 集成第三方 dom 库
+
+和 document 原生方法拿到的东西是一样的。
+
+需要在挂载后才能拿到 dom 节点。控制台的值不太准确，可能会拿到修改之后的值，使用 debugger 更准确
+
+使用方法如下
+
+```
+class App extends React.Component {
+  constructor() {
+    super();
+    this.divRef = React.createRef();
+    console.log(this.divRef);
+    const div = document.querySelector("div");
+    console.log(div, "--", { div });
+  }
+  componentDidMount() {
+    console.log(this.divRef);
+  }
+  render() {
+    return <div ref={this.divRef}>你好啊</div>;
+  }
+}
+```
+
+### 案例一
+
+点击按钮的时候使 input 框聚焦，点击的时候触发子节点的方法
