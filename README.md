@@ -324,3 +324,52 @@ function Son() {
 }
 
 ```
+
+## 错误边界
+
+捕获渲染期间，生命周期方法和整个组件构造函数中捕获错误
+
+无法捕获以下错误
+
+1. 事件处理
+2. 异步代码
+3. 服务端渲染
+4. 它自身抛出的错误
+
+捕捉不到的错误可以使用 try catch
+
+捕获错误组件需要两个生命周期钩子
+
+```
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasError: false,
+    };
+  }
+  static getDerivedStateFromError(err) {
+    console.log("-----------");
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.log("==", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return <h1>something has error......</h1>;
+    }
+    return this.props.children;
+  }
+}
+
+class App extends React.Component {
+  render() {
+    // eslint-disable-next-line
+    throw "模拟";
+    // eslint-disable-next-line
+    return <div>111</div>;
+  }
+}
+```
