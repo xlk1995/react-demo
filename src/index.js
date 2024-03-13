@@ -2,49 +2,54 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasError: false,
-    };
-  }
-  static getDerivedStateFromError(err) {
-    console.log("-----------");
-    return { hasError: true };
-  }
-  componentDidCatch(error, errorInfo) {
-    console.log("==", error, errorInfo);
-  }
+class Home extends React.Component {
+  clickMe = () => {
+    console.log("我是Home，谁点了我");
+  };
   render() {
-    if (this.state.hasError) {
-      return <h1>something has error......</h1>;
-    }
-    return this.props.children;
+    return <h1 onClick={this.clickMe}>Home</h1>;
   }
 }
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.divRef = React.createRef();
-    console.log(this.divRef);
-    const div = document.querySelector("div");
-    console.log(div, "--", { div });
+class Form extends React.Component {
+  constructor(props) {
+    super(props);
+    this.inputRef = React.createRef();
+    this.buttonRef = React.createRef();
+    this.homeRef = React.createRef();
+    this.handleClick = this.handleClick.bind(this);
   }
-  componentDidMount() {
-    console.log(this.divRef);
+
+  handleClick() {
+    this.inputRef.current.focus();
+    this.homeRef.current.clickMe();
   }
+
   render() {
-    return <div ref={this.divRef}>你好啊</div>;
+    return (
+      <div>
+        <input type="text" ref={this.inputRef} />
+        <hr />
+        <button onClick={this.handleClick}>点我</button>
+        <hr />
+        <Home ref={this.homeRef} />
+      </div>
+    );
+  }
+}
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <Form />
+      </div>
+    );
   }
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
+    <App />
   </React.StrictMode>
 );
