@@ -716,3 +716,44 @@ function withHello(Comp) {
   return React.forwardRef((props, ref) => <App {...props} forwardRef={ref} />);
 }
 ```
+
+## hooks
+
+### hooks 解决了什么问题
+
+#### 在组件中复用逻辑很难
+
+provider, consumers, 高阶组件， render props 等其他抽象层的组件会形成嵌套地狱
+
+react 需要为共享逻辑状态提供更好的原生途径
+
+可以从 hooks 组件中提取状态逻辑，使得这些逻辑可以单独复用测试。可以无需修改组件结构的情况下复用状态逻辑。
+
+这使得在组件和社区共享 Hook 变得便捷
+
+#### 复杂组件更难理解
+
+在 class 组件中，业务逻辑太多，可能会导致代码很混乱。
+
+为了解决这个问题， hook 将组件中相互关联部分拆分成更小函数
+
+### 难以理解的 class
+
+语法麻烦
+
+## 常用的 hook
+
+### useState
+
+```
+function App() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <div>this count is {count}</div>
+      <button onClick={() => setCount(count + 1)}>点我</button>
+    </div>
+  );
+}
+```
