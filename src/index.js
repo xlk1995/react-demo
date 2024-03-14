@@ -30,7 +30,7 @@ const ChatApi = new Chat();
 
 setTimeout(() => {
   ChatApi.publish("offline");
-}, 2000);
+}, 1000);
 
 function FriendStatus(props) {
   const status = useStatus(props.id);
@@ -41,10 +41,12 @@ function FriendStatus(props) {
 }
 
 function App() {
+  const [id, setId] = useState(1);
   return (
     <div>
-      <FriendStatus id="1" />
-      <FriendColor id="1" />
+      <FriendStatus id={id} />
+      <button onClick={() => setId(id + 1)}>按钮</button>
+      {/* <FriendColor id="1" /> */}
     </div>
   );
 }
@@ -57,13 +59,13 @@ function useStatus(id) {
     setStatus(status);
   }
   useEffect(() => {
-    console.log("subscribeMessage");
+    console.log("subscribeMessage", id);
     ChatApi.subscribeMessage(id, handleStatus);
     return () => {
-      console.log("unSubscribeMessage");
+      console.log("unSubscribeMessage", id);
       ChatApi.unSubscribeMessage(id, handleStatus);
     };
-  });
+  }, [id, status]);
 
   return status;
 }
