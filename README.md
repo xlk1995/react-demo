@@ -786,3 +786,13 @@ react18 加入了分片更新， fiber 架构， 组件可能执行多次， 目
 在更新之前，会先执行 return 中的代码， 取的值是更新之前的值。这样设计的好处是，可以在 return 中清除上次的一些东西， 比如定时器，从而防止内存泄露
 
 useEffect 的第二个参数传入一个数组， 如果是空数组， 只执行 componentDidMount，如果是其他值，则更新的时候才触发
+
+## useContext、 useCallback、useMemo、useRef
+
+useContext 可以在函数组件中使用， 而不需要使用 Consumer 了
+
+useCallBack 缓存函数 useMemo 缓存对象 React.memo(component)相当于 pureComponent(对比 showComponentUpdate 中的所有值，有变化才更新)
+
+useRef 获取 dom 节点，也可以不绑定 dom，初始值是 undefined
+
+代码：待更
