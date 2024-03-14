@@ -796,3 +796,37 @@ useCallBack 缓存函数 useMemo 缓存对象 React.memo(component)相当于 pur
 useRef 获取 dom 节点，也可以不绑定 dom，初始值是 undefined
 
 代码：待更
+
+## 单页面和多页面和多项目的区别
+
+多页面资源会重新加载，单页面不会，多项目是通过 a 标签直接跳转。
+
+## 路由
+
+自己实现路由的思路
+
+### history
+
+#### pushState
+
+需要三个参数：一个状态对象， 一个标题， 一个 url
+
+#### popState
+
+事件
+
+调用 history.pushState 和 history.popState 不会触发该方法。
+
+popState 只会在浏览器某些行为下触发， 比如浏览器前进后退， 或者在 js 调用 history.back， history.forward， history.go， 或者 a 事件的锚点。
+
+#### replaceState
+
+和 pushState 的使用方法一样，只是会替换掉当前页面栈
+
+#### back
+
+#### forward
+
+#### go
+
+简易实现路由，代码见本次提交
