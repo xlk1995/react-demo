@@ -511,3 +511,208 @@ class App extends React.Component {
   }
 }
 ```
+
+### 在高阶组件中使用 ref
+
+待更新
+
+## 高阶组件
+
+传入一个组件，返回一个新的组件。
+
+### 案例
+
+需求：写一个发布订阅模型。
+
+用高阶组件实现， 评论组件，博客组件。
+
+静态属性复制，ref 转发
+
+体会 Portal 创建的组件，他的事件冒泡顺序还是会遵循 react 组件的父子间的关系
+
+#### 两个组件
+
+```
+class Comments extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: "",
+      list: [],
+    };
+  }
+  handleChange = (msg) => {
+    this.setState({
+      dataSource: msg,
+      list: [...this.state.list, msg],
+    });
+  };
+  componentDidMount() {
+    bus.on("comment", this.handleChange);
+  }
+  componentWillUnmount() {
+    bus.off("comment", this.handleChange);
+  }
+  render() {
+    return (
+      <ul>
+        {this.state.list.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    );
+  }
+}
+class Blog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: "",
+      list: [],
+    };
+  }
+  handleChange = (msg) => {
+    this.setState({
+      dataSource: msg,
+      list: [...this.state.list, msg],
+    });
+  };
+  componentDidMount() {
+    bus.on("blog", this.handleChange);
+  }
+  componentWillUnmount() {
+    bus.off("blog", this.handleChange);
+  }
+  render() {
+    return <div>{this.state.list}</div>;
+  }
+}
+```
+
+### 简易版高阶组件
+
+```
+class Comments extends React.Component {
+  render() {
+    return (
+      <ul>
+        {this.props.data.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    );
+  }
+}
+class Blog extends React.Component {
+  render() {
+    return <div>{this.props.data}</div>;
+  }
+}
+
+// 高阶组件
+function withCommentsAndBlog(Comp, selectData) {
+  class logic extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        data: selectData(""),
+      };
+    }
+    handleChange = (msg) => {
+      this.setState({
+        data: selectData(msg),
+      });
+    };
+    componentDidMount() {
+      bus.on(this.props.type, this.handleChange);
+    }
+    componentWillUnmount() {
+      bus.off(this.props.type, this.handleChange);
+    }
+    render() {
+      return <Comp data={this.state.data} {...this.props} />;
+    }
+  }
+  return logic;
+}
+const commentsList = [],
+  blogList = [];
+const CommentsSub = withCommentsAndBlog(Comments, (msg) => {
+  if (!msg) {
+    return [];
+  }
+  commentsList.push(msg);
+  return commentsList;
+});
+const BlogSub = withCommentsAndBlog(Blog, (msg) => {
+  blogList.push(msg);
+  return blogList;
+});
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      commentsList: [],
+      blogList: [],
+    };
+  }
+  postComments = (msg = 0) => {
+    msg++;
+
+    bus.emit("comment", msg);
+  };
+  postBlog = (msg = 1) => {
+    msg++;
+    bus.emit("blog", msg);
+  };
+  render() {
+    return (
+      <div>
+        <div>
+          <button onClick={() => this.postComments(1)}>发comments</button>
+          <button onClick={() => this.postBlog(2)}>发blog</button>
+        </div>
+        <div>
+          <CommentsSub type="comment" />
+          <hr />
+          <BlogSub type="blog" />
+        </div>
+      </div>
+    );
+  }
+}
+```
+
+### 注意的点
+
+hoc 必须是纯函数
+
+1. 不要在 hoc 中修改组件的原型
+2. 不要在 render 中使用 hoc
+
+### 复制静态属性
+
+```
+pnpm i hoist-non-react-statics
+```
+
+```
+hoistNonReactStatic(App, Comp);
+```
+
+### 转发 ref
+
+```
+function withHello(Comp) {
+  class App extends React.Component {
+    render() {
+      const { forwardRef, ...rest } = this.props;
+
+      return <Comp ref={forwardRef} {...rest} />;
+    }
+  }
+  hoistNonReactStatic(App, Comp);
+  return React.forwardRef((props, ref) => <App {...props} forwardRef={ref} />);
+}
+```
