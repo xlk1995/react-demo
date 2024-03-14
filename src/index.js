@@ -33,6 +33,23 @@ setTimeout(() => {
 }, 2000);
 
 function FriendStatus(props) {
+  const status = useStatus(props.id);
+  if (status == null) {
+    return <h1>loading....</h1>;
+  }
+  return <h1>{status}</h1>;
+}
+
+function App() {
+  return (
+    <div>
+      <FriendStatus id="1" />
+      <FriendColor id="1" />
+    </div>
+  );
+}
+
+function useStatus(id) {
   const [status, setStatus] = useState(null);
 
   function handleStatus(status) {
@@ -41,25 +58,24 @@ function FriendStatus(props) {
   }
   useEffect(() => {
     console.log("subscribeMessage");
-    ChatApi.subscribeMessage(props.id, handleStatus);
+    ChatApi.subscribeMessage(id, handleStatus);
     return () => {
       console.log("unSubscribeMessage");
-      ChatApi.unSubscribeMessage(props.id, handleStatus);
+      ChatApi.unSubscribeMessage(id, handleStatus);
     };
   });
 
+  return status;
+}
+
+function FriendColor(props) {
+  const status = useStatus(props.id);
   if (status == null) {
     return <h1>loading....</h1>;
   }
 
-  return <h1>{status}</h1>;
-}
-
-function App() {
   return (
-    <div>
-      <FriendStatus id="1" />
-    </div>
+    <h1 style={{ color: status === "offline" ? "red" : "green" }}>{status}</h1>
   );
 }
 

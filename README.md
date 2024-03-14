@@ -757,3 +757,26 @@ function App() {
   );
 }
 ```
+
+### useEffect
+
+给函数组件操作了副作用的能力，取代 class 组件中 componentDidMount，componentDidUpdate，componentWillUnmount
+
+#### useEffect 执行两次的原因
+
+1. react18 新增的特性
+2. 仅在开发环境+严格模式下才出现的，生产环境只出现一次
+3. 模拟立即卸载重新挂载程序
+
+react18 加入了分片更新， fiber 架构， 组件可能执行多次， 目的就是让我们注意，useEffect 多次执行并不会影响渲染结果
+
+### 使用 hooks 需要注意的点
+
+- 只能在函数最外层调用 Hook，不能在循环条件判断中调用
+- 只能在函数式组件中调用 hook，不要在其他 js 中代码调用
+
+### 用一个案例来理解 hooks
+
+写一个发布订阅模型，实现用户上线离线功能， 同时实现如果上线和离线的颜色不同，并写一个 hooks 把逻辑抽离出来
+
+案例见本次一起提交的代码
