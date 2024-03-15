@@ -884,3 +884,18 @@ popState 只会在浏览器某些行为下触发， 比如浏览器前进后退�
     });
   </script>
 ```
+
+### Redux 的执行流程
+
+1. createStore 然后初始化执行 reducer, action 的类型为@redux.x.x.x， 就对 store 进行初始化, 初始化的时候 subscribe 不会进行发布
+2. dispatch 才会触发方法
+3. 进入 reducer， 修改 store 状态
+4. 去执行 subscribe 中订阅的函数
+
+## Redux Toolkit
+
+```
+pnpm install @reduxjs/toolkit
+
+npm install react-redux
+```
