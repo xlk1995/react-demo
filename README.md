@@ -841,3 +841,46 @@ popState 只会在浏览器某些行为下触发， 比如浏览器前进后退�
 - useParams
 - useSearchParams
 - useNavigate
+
+## Redux
+
+- 创建 store 仓库
+- 订阅
+- dispatch
+- actions
+- 修改 state 状态
+
+```
+<body>
+    <div>
+      <span id="count"></span>
+      <button id="inc">+1</button>
+      <button id="dec">-1</button>
+    </div>
+  </body>
+  <script src="https://cdn.bootcdn.net/ajax/libs/redux/4.2.1/redux.js"></script>
+
+  <script>
+    const initState = {
+      value: 0,
+    };
+
+    function Reducer(state = initState, action) {
+      if (action.type == "count/increment") {
+        return { ...state, ...{ value: state.value + 1 } };
+      }
+    }
+    const store = Redux.createStore(Reducer);
+    store.subscribe(render);
+
+    const el = document.querySelector("#count");
+    function render() {
+      el.innerHTML = store.getState().value;
+    }
+
+    const btn1 = document.getElementById("inc");
+    btn1.addEventListener("click", () => {
+      store.dispatch({ type: "count/increment" });
+    });
+  </script>
+```
