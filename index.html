@@ -12,14 +12,46 @@
       <button id="dec">-1</button>
     </div>
   </body>
-  <script src="https://cdn.bootcdn.net/ajax/libs/redux/4.2.1/redux.js"></script>
 
+  <!-- <script src="https://cdn.bootcdn.net/ajax/libs/redux/4.2.1/redux.js"></script> -->
+
+  <!-- <script src="./1.js"></script> -->
   <script>
+    function createStore(reducer) {
+      let state;
+      const listener = [];
+
+      function getState() {
+        return state;
+      }
+
+      function subscribe(callback) {
+        listener.push(callback);
+      }
+
+      function dispatch(action) {
+        state = reducer(state, action);
+        listener.forEach((fn) => fn());
+      }
+
+      const store = {
+        getState,
+        subscribe,
+        dispatch,
+      };
+      state = reducer(state, { type: "@redux1.1.1.1" });
+      return store;
+    }
+
+    window.Redux = {};
+
+    Redux.createStore = createStore;
     const initState = {
       value: 0,
     };
 
     function Reducer(state = initState, action) {
+      console.log(action.type);
       if (action.type == "count/increment") {
         return { ...state, ...{ value: state.value + 1 } };
       }
@@ -31,6 +63,7 @@
     function render() {
       el.innerHTML = store.getState().value;
     }
+    // render();
 
     const btn1 = document.getElementById("inc");
     btn1.addEventListener("click", () => {
